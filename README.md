@@ -35,4 +35,4 @@ The **College Management System** is a backend application built using **FastAPI
 
 
 
----
+
