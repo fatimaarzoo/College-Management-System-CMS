@@ -1,0 +1,48 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+		<!-- START SECTION TOP -->
+		<section class="section-top">
+			<div class="container">
+				<div class="col-lg-10 offset-lg-1 text-center">
+					<div class="section-top-title wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
+						<h1>All Course</h1>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li> / Course</li>
+						</ul>
+					</div><!-- //.HERO-TEXT -->
+				</div><!--- END COL -->
+			</div><!--- END CONTAINER -->
+		</section>	
+		<!-- END SECTION TOP -->
+		
+		<!-- START COURSE -->
+		<section class="home_course section-padding">
+			<div class="container">			
+				<div class="row">
+					{% for c in crs %}
+					<div class="col-lg-4 col-sm-6 col-xs-12">
+						
+                        <div class="single_course">
+							<div class="single_c_img">
+								<img src="/assets/img/course/1.png" class="img-fluid" alt="course-image" />
+								<span>Education</span>
+							</div>
+							<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+							<h4><a href="/cms/courses/{{c.id}}">{{c.name}}</a></h4>
+							<p><span class="ti-book"> </span>Course - ID : {{c.id}}</p>
+							<!-- <p><span class="ti-alarm-clock"> </span>2 Hrs 32 Min</p> -->
+							<div class="price">INCHARGE- ID: {{c.incharge_id}}</div>
+                            
+						</div>
+						
+					</div><!-- END COL -->		
+					{% endfor %}			
+				</div><!--- END ROW -->
+			</div><!--- END CONTAINER -->		
+		</section>
+		<!-- END COURSE -->		
+		
+{% endblock %}
+

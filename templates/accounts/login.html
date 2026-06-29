@@ -1,0 +1,103 @@
+{% extends "home/base.html" %}
+{% block content %}
+<div class="container-fluid">
+<div class="row">
+<div class="col-sm-4"></div>
+<div class="col-sm-4 bg-light shadow-lg py-5 px-5 mx-h my-5">
+  <h1 class="text-center">LOGIN</h1>
+ <hr>
+<form method="post" id="loginForm">
+  <!-- Email input -->
+  <div data-mdb-input-init class="form-outline mb-4">
+    <input type="text" name="username" id="username" class="form-control" />
+    <label class="form-label" for="username">Username</label>
+  </div>
+
+  <!-- Password input -->
+  <div data-mdb-input-init class="form-outline mb-4">
+    <input type="password" name="password" id="password" class="form-control" />
+    <label class="form-label" for="password">Password</label>
+  </div>
+
+  <!-- 2 column grid layout for inline styling -->
+  <div class="row mb-4">
+    <div class="col d-flex justify-content-center">
+      <!-- Checkbox -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
+        <label class="form-check-label" for="form2Example31"> Remember me </label>
+      </div>
+    </div>
+
+    <div class="col">
+      <!-- Simple link -->
+      <a href="/cms/accounts/forget_password">Forgot password?</a>
+    </div>
+  </div>
+
+  <!-- Submit button -->
+  <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Sign in</button>
+
+  <!-- Register buttons -->
+  <div class="text-center">
+    <p>Not a member? <a href="/cms/accounts/register/">Register</a></p>
+    <p>or sign up with:</p>
+    <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+      <i class="fab fa-facebook-f"></i>
+    </button>
+
+    <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+      <i class="fab fa-google"></i>
+    </button>
+
+    <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+      <i class="fab fa-twitter"></i>
+    </button>
+
+    <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+      <i class="fab fa-github"></i>
+    </button>
+  </div>
+</form>
+</div>
+<div class="col-sm-4"></div>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+  $("#loginForm").submit(function(e){
+    e.preventDefault();
+
+    const payload = {
+        username: $("#username").val(),
+        password: $("#password").val()
+    };
+
+    console.log(payload);
+
+    $.ajax({
+      url: "/cms/accounts/login",
+      type : "POST",
+      contentType: "application/json",
+      data: JSON.stringify({
+        username: $("#username").val(),
+        password: $("#password").val()
+      }),
+      success: function(response){
+        console.log("Login successful",response);
+        const access_token = response["access_token"];
+        console.log(access_token);
+        localStorage.setItem("access_token",access_token);
+        window.location.href = '/';
+      },
+      error: function(xhr){
+        console.log("Login failed",xhr.responseText);
+      }
+      
+    })
+   
+  })
+</script>
+{% endblock %}
+
+

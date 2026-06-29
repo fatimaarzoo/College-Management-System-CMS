@@ -1,0 +1,83 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+		<!-- START SECTION TOP -->
+		<section class="section-top">
+			<div class="container">
+				<div class="col-lg-10 offset-lg-1 text-center">
+					<div class="section-top-title wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
+						<h1 id="user">Welcome {{user.username}}</h1>
+                        <h2>Settings</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li> / settings</li>
+						</ul>
+					</div><!-- //.HERO-TEXT -->
+				</div><!--- END COL -->
+			</div><!--- END CONTAINER -->
+		</section>	
+		<!-- END SECTION TOP -->
+		
+	<!-- START AGENT PROFILE -->
+	<section class="template_agent section-padding">
+		<div class="container">
+			<div class="row">
+			  <div class="col-lg-12 col-sm-12 col-xs-12">
+					<div class="single_agent">
+						<div class="single_agent_image">
+							<img src="assets/img/team/team1.jpg" class="img-fluid" alt=""/>
+						</div>
+						<div class="single_agent_content">
+							<div class="single_agent_content">
+							<h4>{{user.username}}</h4>
+							<h5>{{user.role}} </h5>
+							<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever type book.</p>
+						
+                            <ul>
+								<li><i class="fa fa-envelope-o"></i>{{user.mail}}</li> 							
+							</ul>
+							<div>
+								<a href="/cms/accounts/change_password" class="btn btn-primary">Change Password</a>
+								<!-- <a href="#" class="btn btn-warning">CHOOSE COURSE</a> -->
+								<!-- <div id="delete" class="btn btn-danger">DELETE</div> -->
+								
+							</div>
+						</div>
+						
+					</div><!--- END SINGLE ITEM -->		
+			  </div><!--- END COL -->				  
+			</div><!--- END ROW -->
+		</div><!--- END CONTAINER -->		
+	</section>
+	<!-- END AGENT PROFILE -->	
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	
+{% endblock %}
+<!-- <script>
+       
+		
+		const access_token = localStorage.getItem("access_token");
+
+		$.ajax({
+			url: `/cms/accounts/get_user`,
+			type: "GET",
+			contentType : "application/json",
+			headers : {"Authorization": `Bearer ${access_token}` },
+
+			success:function(response){
+				console.log("Got the user",response," ")//,response.status
+                console.log(response)
+				
+			},
+			error: function(xhr){
+				console.log("Couldnt get user",xhr.responseText);
+				if(xhr.responseText == "Signature has expired.")(
+					console.log("login to delete, not authorized to delete")
+			)
+			}
+
+		})
+	
+	</script>
+	 -->

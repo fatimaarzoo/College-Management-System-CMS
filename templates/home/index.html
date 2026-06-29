@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Management System</title>
+</head>
+<body>
+    <h2>Welcome to</h2>
+    <h1>College Management System</h1>
+    <p id="output"></p>
+    <button onclick="test()">Run</button>
+</body>
+
+
+<script>
+async function test() {
+    const res = await fetch("http://127.0.0.1:8000/");
+    const data = await res.json();
+    document.getElementById("output").textContent = data.message; 
+    console.log(data);
+}
+</script>
+</html>

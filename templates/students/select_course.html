@@ -1,0 +1,93 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+<section class="section-top">
+	
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow">
+                <div class="card-header">
+                    <h3 class="mb-0">Choose Course</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <form id="teacherForm">
+
+                        <div class="mb-3">
+                            <label for="coursename" class="form-label">
+                                Course Form
+                            </label>
+<!-- 
+                            <input type="text" class="form-control" id="name" placeholder="Enter course name" required >
+                            <input type="text" class="form-control" id="subject" placeholder="Enter subject" required > -->
+                            
+                            <select name="coursename" id="coursename" required> Select course
+                            {% for c in crs %}
+                                <option value={{c.id}} id="course">{{ c }}</option>
+                            {% endfor %}
+
+                            </select>
+
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100"
+                            id="courseform" >
+                            Add Course
+                        </button>
+<!-- onclick="coursevalue(event)"> -->
+                    </form>
+
+                    <div id="message" class="mt-3"></div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script>
+    function coursevalue(event){
+    event.preventDefault();
+    const crs = document.getElementById('coursename').value;
+    console.log(crs);
+    }
+
+    $('#courseform').on('click', function(e){
+		e.preventDefault();
+
+        const crs_id = document.getElementById('coursename').value;
+        const access_token = localStorage.getItem("access_token");
+        const std_id = "{{std.id}}";
+     
+    
+
+        $.ajax({
+            url : `cms/students/${std_id}/course/${crs_id}`,
+            type: "PATCH",
+			contentType : "application/json",
+			headers : {"Authorization": `Bearer ${access_token}` },
+
+            success:function(response){
+				console.log("Course added",response," ",response.status)
+				window.location.href = "/";
+			},
+			error: function(xhr){
+				console.log("Course not added",xhr.responseText);
+				if(xhr.responseText == "Signature has expired.")(
+					console.log("login to add, not authorized to add"))
+            }
+        })
+    
+})
+</script>
+
+
+{% endblock%}

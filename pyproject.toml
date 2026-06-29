@@ -1,0 +1,25 @@
+[project]
+name = "cms-v2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "alembic>=1.18.4",
+    "celery>=5.6.3",
+    "fastapi>=0.136.0",
+    "flower>=2.0.1",
+    "itsdangerous>=2.2.0",
+    "mailtrap>=2.5.0",
+    "passlib>=1.7.4",
+    "pydantic[email]>=2.13.3",
+    "pyjwt>=2.12.1",
+    "pymysql>=1.1.2",
+    "python-dotenv>=1.2.2",
+    "python-jose>=3.5.0",
+    "python-multipart>=0.0.26",
+    "redis>=7.4.0",
+    "requests>=2.33.1",
+    "sqlalchemy>=2.0.49",
+    "uvicorn>=0.45.0",
+]

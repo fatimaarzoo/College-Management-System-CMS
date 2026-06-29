@@ -1,0 +1,87 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+<section class="section-top">
+	
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow">
+                <div class="card-header">
+                    <div id="message" class="bg-danger"></div>
+                    <h3 class="mb-0">Add Student</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <form id="studentForm">
+
+                        <div class="mb-3">
+                           
+
+                            <input type="text" class="form-control" id="firstname" placeholder="Enter first name" required >
+                            <input type="text" class="form-control" id="lastname" placeholder="Enter last name" required >
+                            <!-- <input type="text" class="form-control" id="dept" placeholder="Enter department" required > -->
+                            <input type="number" class="form-control" id="semester" placeholder="Enter semester" required >
+                            <input type="email" class="form-control" id="email" placeholder="Enter email" required >
+                            <input type="number" class="form-control" id="contact" placeholder="Enter contact" required >
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100">
+                            Add Student
+                        </button>
+
+                    </form>
+
+                    <div id="message" class="mt-3"></div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+
+ $("#studentForm").submit(function(e){
+    e.preventDefault();
+    
+    const access_token = localStorage.getItem("access_token");
+
+    $.ajax({
+      url: "/cms/students/add-student",
+      type : "POST",
+      contentType: "application/json",
+      headers: {"Authorization": `Bearer ${access_token}`},
+      data: JSON.stringify({
+        firstname: $("#firstname").val(),
+        lastname:  $("#lastname").val(),
+        semester: $("#semester").val(),
+        email:   $("#email").val(),
+        contact: $("#contact").val()
+      }),
+      success: function(response){
+        console.log("Student adding Successful",response);//only a new user with thier user id can add the student 
+                                                         //if the role is that of the student then he can otherwise he cannot
+        alert('Student Added')
+      },
+      error: function(xhr){
+        console.log("Student not Added",xhr.responseText);
+        alert('Student not added',xhr.responseText);
+        // document.getElementById('message').display = str(xhr.responseText);
+        // document.getElementById('message').innerHTML = str(xhr.responseText);
+      }
+      
+    })
+   
+  })
+</script>
+	
+		</section>
+		<!-- END TEAM -->	
+{% endblock%}
