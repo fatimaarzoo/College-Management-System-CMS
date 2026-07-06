@@ -7,7 +7,8 @@ import uuid
 #role=??? dictionary???
 # role ={
 #  1 : "Student",
-#  2 : "Teacher"   
+#  2 : "Teacher"
+#  3 : "Others"
 # }
 
 class User(Base):

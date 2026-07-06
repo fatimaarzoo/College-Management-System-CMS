@@ -4,10 +4,11 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from database.database import get_db
+from database.models import User
 from schemas import StudentAdd, StudentResponse, StudentUpdate
 from database.models import Student, Course
 from pydantic import ValidationError
-from .accounts import get_current_user
+from .accounts import get_current_user,get_current_user_second
 
 router = APIRouter(prefix="/students", tags=["Students"])
 templates = Jinja2Templates(directory="templates")
@@ -25,7 +26,7 @@ def get_students(request: Request,db: Session = Depends(get_db)):
 
 
 
-@router.get("/add-student",response_class=HTMLResponse)
+@router.get("/add-student",response_class=HTMLResponse,include_in_schema=False)
 def add_student_page(request: Request , db: Session = Depends(get_db)):
         return templates.TemplateResponse(request=request, name="students/enroll_students.html",context={})
 
@@ -58,7 +59,6 @@ def enroll_student(student: StudentAdd, db: Session = Depends(get_db),user = Dep
         db.commit()
         db.refresh(std)
         return StudentResponse.model_validate(std)
-        # return templates.TemplateResponse(request=request, name="students/enroll_students.html", context={"std":StudentResponse.model_validate(std)})
     except HTTPException:
         raise
     except ValidationError as e:
@@ -74,7 +74,7 @@ def enroll_student(student: StudentAdd, db: Session = Depends(get_db),user = Dep
         db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
-@router.get("/update_student/{id}",response_class=HTMLResponse)
+@router.get("/update_student/{id}",response_class=HTMLResponse,include_in_schema=False)
 def update_student_page(request: Request ,id:int, db: Session = Depends(get_db)):
     std = db.query(Student).filter(Student.id ==id).first()
     return templates.TemplateResponse(request=request, name="students/update_student.html",context={'std':std})
@@ -115,8 +115,6 @@ def update_student(request:Request,id: int, student: StudentUpdate, db: Session 
         db.commit()
         db.refresh(std)
         return StudentResponse.model_validate(std)
-        # return templates.TemplateResponse(request=request, name="students/update_student.html",context={'std':StudentResponse.model_validate(std)})
-        
     except (ValueError, IntegrityError) as e:
         db.rollback()
         raise HTTPException(status_code=422, detail=str(e))
@@ -124,7 +122,7 @@ def update_student(request:Request,id: int, student: StudentUpdate, db: Session 
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/select_course/{id}",response_class=HTMLResponse)
+@router.get("/select_course/{id}",response_class=HTMLResponse,include_in_schema=False)
 def add_student_page(request: Request ,id:int, db: Session = Depends(get_db)):
     std = db.get(Student, id)
     crs = db.query(Course).all()
@@ -140,10 +138,15 @@ def find_student(request:Request,id: int, db: Session = Depends(get_db)):
             Student object: Student details of the Student with that id.
     """
     try:
+        token = request.cookies.get("access_token")
+        user_id= get_current_user_second(token)    
+        user = db.query(User).filter(User.id == int(user_id)).first()
+        print(user.role)
+        # user = request.user
         std = db.query(Student).filter(Student.id == id).first()
         if not std:
             raise HTTPException(status_code=404, detail=f"Student of id={id} not found")
-        return templates.TemplateResponse(request=request, name="students/student_details.html", context={"std":std})
+        return templates.TemplateResponse(request=request, name="students/student_details.html", context={"std":std,"user":user or None})
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

@@ -10,7 +10,7 @@ from database.models import Course, Teacher, User
 from pydantic import PositiveInt
 from typing import List
 from .accounts import get_current_user,get_current_user_second
-
+from starlette.authentication import requires
 
 router = APIRouter(prefix="/courses", tags=["Courses"])
 templates = Jinja2Templates(directory="templates")
@@ -29,12 +29,12 @@ def get_courses(request: Request , db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/add_course",response_class=HTMLResponse)
+@router.get("/add_course",response_class=HTMLResponse,include_in_schema=False)
 def add_course_page(request:Request):
     return templates.TemplateResponse(request=request, name="courses/add_course.html",context={})
 
 @router.post("/add_course",response_model=CourseResponse)
-def add_course(request:Request,course: CourseAdd, db: Session = Depends(get_db),user = Depends(get_current_user)):
+def add_course(request:Request,course: CourseAdd, db: Session = Depends(get_db),user=Depends(get_current_user)):
     """
     Method adds one course 
     """
@@ -57,7 +57,7 @@ def add_course(request:Request,course: CourseAdd, db: Session = Depends(get_db),
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/update-course/{id}",response_class=HTMLResponse)
+@router.get("/update-course/{id}",response_class=HTMLResponse,include_in_schema=False)
 def update_course_page(request:Request,id: PositiveInt, db: Session = Depends(get_db)):
     crs = db.get(Course,id)
     return templates.TemplateResponse(request=request, name="courses/update-course.html",context={'crs':crs})
@@ -81,7 +81,6 @@ def update_course(id: PositiveInt, update_crs: CourseUpdate, db: Session = Depen
         db.commit()
         db.refresh(crs)
         return crs
-        # return templates.TemplateResponse(request=request, name="courses/update-course.html",context={'crs':crs} ,status_code=200)
     except RequestValidationError as e:
         raise HTTPException(status_code=422, detail="Bad request")
     except (ValueError, IntegrityError) as e:
@@ -107,8 +106,8 @@ def delete_course(id: PositiveInt, db: Session = Depends(get_db),user = Depends(
         raise HTTPException(status_code=500, detail=str(e))
     
 
-
-@router.get("/{id}",response_model=CourseResponse)
+# @requires('authenticated')
+@router.get("/{id}",response_model=CourseResponse,include_in_schema=False)
 def course_page(request:Request,id:int,db : Session = Depends(get_db)):
     """
     Method returns selected course
@@ -117,6 +116,7 @@ def course_page(request:Request,id:int,db : Session = Depends(get_db)):
     user_id= get_current_user_second(token)    
     user = db.query(User).filter(User.id == int(user_id)).first()
     print(user.role)
+    # user =request.user
 
     try:
         crs = db.query(Course).filter(Course.id == id).first()
@@ -137,7 +137,7 @@ def students_in_course(request:Request,course_id: PositiveInt, db: Session = Dep
         if not std:
             return {"message":"No Students found"}
         return templates.TemplateResponse(request=request, name="courses/course_detail.html",context={"students": [(s.firstname + s.lastname, s.id, s.dept) for s in std],"std":std})
-        return {"students": [(s.firstname + s.lastname, s.id, s.dept) for s in std]}
+        # return {"students": [(s.firstname + s.lastname, s.id, s.dept) for s in std]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

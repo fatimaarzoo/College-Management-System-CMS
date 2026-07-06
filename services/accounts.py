@@ -102,7 +102,7 @@ def get_current_user(token : str = Depends(oauth2_scheme)):
     return username 
 
 def get_current_user_second(token : str ):
-    payload = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
+    payload = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM],options={"verify_exp": False})
     username= payload.get("sub")
     
     if username is None:

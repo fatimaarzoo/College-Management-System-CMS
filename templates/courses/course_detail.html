@@ -247,12 +247,14 @@
                                 <!-- UPDATE AND DELETE COURSE-------------------------------------------------------------------- -->
                                 <div id="editcourse">
                                 <form>
+                                    
+                                {% if user.role == "teacher" %}
                                 <div class="btn bg-danger btn-lg rounded-5 px-5 py-2 my-2 mx-5" type="submit"  id="Delete"> DELETE</div>
                                     <!-- href="/cms/courses/{{crs.id}}" onclick="deleteButton()" -->
                                 <a class="btn btn-info" href="/cms/courses/update-course/{{crs.id}}">UPDATE COURSE</a>
                                 
                                 <a class="btn btn-primary rounded-5 px-2 py-2 my-2 mx-5" href="/cms/courses/{{crs.id}}/students">SEE ENROLLED STUDENTS</a>
-                                
+                                {% endif %}
                                 </form>
                                 </div>
                                 <!-- END============================================================ -->
@@ -356,9 +358,6 @@
     const deleteButton = document.getElementById("Delete")
     const role = "{{user.role}}";
     console.log(role);
-    // if(role == "student"){
-    //     document.getElementById("editcourse").style.display = "none";
-    // }
 
     deleteButton.addEventListener("click",async () => {
     try{

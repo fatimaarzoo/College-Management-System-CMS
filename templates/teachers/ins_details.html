@@ -39,10 +39,13 @@
 								{% endfor %}
 							</ul>
 							<div>
+								{{user.id}}
+								{% if user.role == "teacher" %}
+							
 								<a href="/cms/teachers/update_teacher" class="btn btn-primary">UPDATE</a>
 								<a href="/cms/teachers/choose_course/{{tea.id}}" class="btn btn-warning">CHOOSE COURSE</a>
 								<div id="delete" class="btn btn-danger">DELETE</div>
-								
+								{% endif %}
 							</div>
 						</div>
 						<div class="agent_social">

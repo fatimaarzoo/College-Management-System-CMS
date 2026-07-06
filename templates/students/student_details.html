@@ -44,10 +44,11 @@
 							</ul>
                             <br>
 							<div>
+								{% if user.role == "teacher" %}
 								<a href="/cms/students/update_student/{{std.id}}" class="btn btn-primary">UPDATE</a>
 								<a href="/cms/students/select_course/{{std.id}}" class="btn btn-warning">SELECT COURSE</a>
 								<div id="delete" class="btn btn-danger">DELETE</div>
-								
+								{% endif %}
 							</div>
 						</div>
 						<!-- <div class="agent_social">
