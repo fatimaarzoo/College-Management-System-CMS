@@ -1,0 +1,96 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+		<!-- START SECTION TOP -->
+		<section class="section-top">
+			<div class="container">
+				<div class="col-lg-10 offset-lg-1 text-center">
+					<div class="section-top-title wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
+						<h1>Student Details</h1>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li> / instructor details</li>
+						</ul>
+					</div><!-- //.HERO-TEXT -->
+				</div><!--- END COL -->
+			</div><!--- END CONTAINER -->
+		</section>	
+		<!-- END SECTION TOP -->
+		
+	<!-- START AGENT PROFILE -->
+	<section class="template_agent section-padding">
+		<div class="container">
+			<div class="row">
+			  <div class="col-lg-12 col-sm-12 col-xs-12">
+					<div class="single_agent">
+						<div class="single_agent_image">
+							<!-- <img src="assets/img/team/team1.jpg" class="img-fluid" alt=""/> -->
+                            <img src="/assets/img/team/team1.jpg" alt="">
+						</div>
+						<div class="single_agent_content">
+                            <h4>Student Details</h4>
+							<h5>Name: {{std.firstname}} {{std.lastname}}</h5>
+							<h5>Department: {{std.dept}} &nbsp; </h5>
+                            <h5>semester: {{std.semester}} &nbsp; </h5>
+
+							<ul>
+								<li><i class="fa fa-envelope-o"></i>{{std.email}}</li>
+								<li><i class="fa fa-phone"></i>{{std.contact}}</li>
+								<li><i class="fa fa-id-card"></i>{{std.user_id}}</li>
+                                <li><i class="fa fa-book"></i>Courses</li>
+								{% for crs in std.courses %}
+								<li><i class="fa fa-circle"></i>{{std.courses}}</li>
+								{% endfor %}
+							</ul>
+                            <br>
+							<div>
+								{% if user.role == "teacher" %}
+								<a href="/cms/students/update_student/{{std.id}}" class="btn btn-primary">UPDATE</a>
+								<a href="/cms/students/select_course/{{std.id}}" class="btn btn-warning">SELECT COURSE</a>
+								<div id="delete" class="btn btn-danger">DELETE</div>
+								{% endif %}
+							</div>
+						</div>
+						<!-- <div class="agent_social">
+							<ul class="list-inline">
+								<li><a href="#" class="top_f_facebook"><img src="assets/img/fb.svg" alt="" /></a></li>
+								<li><a href="#" class="top_f_facebook"><img src="assets/img/pn.svg" alt="" /></a></li>
+								<li><a href="#" class="top_f_facebook"><img src="assets/img/ins.svg" alt="" /></a></li>
+							</ul>
+						</div> -->
+					</div><!--- END SINGLE ITEM -->		
+			  </div><!--- END COL -->				  
+			</div><!--- END ROW -->
+		</div><!--- END CONTAINER -->		
+	</section>
+	<!-- END AGENT PROFILE -->	
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+	$('#delete').on('click', function(e){
+		e.preventDefault();
+
+		const access_token = localStorage.getItem("access_token");
+		const id = "{{std.id}}";
+
+		$.ajax({
+			url: `/cms/teachers/delete/${id}`,
+			type: "DELETE",
+			contentType : "application/json",
+			headers : {"Authorization": `Bearer ${access_token}` },
+
+			success:function(response){
+				console.log("Student deleted",response," ",response.status)
+				window.location.href = "/";
+			},
+			error: function(xhr){
+				console.log("Student not deleted",xhr.responseText);
+				if(xhr.responseText == "Signature has expired.")(
+					console.log("login to delete, not authorized to delete")
+			)
+			}
+
+		})
+	})
+	</script>
+	
+{% endblock %}
