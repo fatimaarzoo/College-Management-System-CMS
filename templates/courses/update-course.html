@@ -1,0 +1,97 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+		<!-- START SECTION TOP -->
+		<section class="section-top">
+	
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow">
+                <div class="card-header">
+                    <h3 class="mb-0">Update Course</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <form id="courseForm">
+
+                        <div class="mb-3">
+                           
+                            
+
+                            Course Name:<input
+                                type="text"
+                                class="form-control"
+                                id="coursename"
+                                placeholder="Enter course name"
+                                required
+                                value={{crs.name}}
+                            >
+                            
+                            Incharge Id : <input
+                                type="number"
+                                class="form-control"
+                                id="incharge_id"
+                                placeholder="Enter Teacher id"
+                                value={{crs.incharge_id}}
+                                required
+                            >
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100">
+                            Update 
+                        </button>
+
+                    </form>
+
+                    <div id="message" class="mt-3"></div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>	
+</section>
+<!-- END COURSE -->		
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+const id = "{{crs.id}}";
+
+ $("#courseForm").submit(function(e){
+    e.preventDefault();
+    
+    const access_token = localStorage.getItem("access_token");
+    console.log(access_token);
+    
+
+    $.ajax({
+      url: `/cms/courses/update-course/${id}`,
+      type : "PUT",
+      contentType: "application/json",
+      headers: {"Authorization": `Bearer ${access_token}`},
+      data: JSON.stringify({
+        name: $("#coursename").val(),
+        incharge_id: $("#incharge_id").val()
+      }),
+      success: function(response){
+        console.log("Course updation Successful",response);
+        
+      },
+      error: function(xhr){
+        console.log("Course not Updated",xhr.responseText);
+      }
+      
+    })
+   
+  })
+</script>
+
+
+{% endblock %}
+

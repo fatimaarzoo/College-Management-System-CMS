@@ -1,0 +1,30 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+
+		
+		<!-- START TEAM -->
+		<section class="team_area section-padding">
+			<div class="container">									
+				<div class="section-title text-center">
+					<h2>List Of Our Students</h2>
+					<p>We offer a brand new approach to the most basic learning paradigms. Choose from a wide range of learning options and gain new skills! Our school is know.</p>
+				</div>						
+				<div class="row">				
+					{% for s in std %}									
+					<div class="col-sm-11 bg-secondary-emphasis mx-5 px-2 py-2 shadow">
+                    <a style="text-decoration: none;" href="/cms/students/{{s.id}}"><p>&ensp;&ensp;{{s.id}}&nbsp;&ensp; | &ensp;&nbsp;{{s.firstname}} {{s.lastname}}
+                    </p>
+                    <p style="font-size: small;">&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;{{s.dept}} {{s.semester}} semester 
+                    </p></a>
+
+                    </div>
+                    <!--- END COL -->
+					{% endfor %}										
+												
+								  
+				</div><!--- END ROW -->
+			</div><!--- END CONTAINER -->
+		</section>
+		<!-- END TEAM -->	
+{% endblock%}
