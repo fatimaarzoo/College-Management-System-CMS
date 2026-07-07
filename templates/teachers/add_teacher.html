@@ -1,0 +1,80 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+<section class="section-top">
+	
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow">
+                <div class="card-header">
+                    <h3 class="mb-0">Add Teacher</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <form id="teacherForm">
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label">
+                                Teacher Form
+                            </label>
+
+                            <input type="text" class="form-control" id="name" placeholder="Enter course name" required >
+                            <input type="text" class="form-control" id="subject" placeholder="Enter subject" required >
+                            <input type="email" class="form-control" id="email" placeholder="Enter email" required >
+                            <input type="number" class="form-control" id="contact" placeholder="Enter contact" required >
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100">
+                            Add Teacher
+                        </button>
+
+                    </form>
+
+                    <div id="message" class="mt-3"></div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+ $("#teacherForm").submit(function(e){
+    e.preventDefault();
+    
+    const access_token = localStorage.getItem("access_token");
+
+    $.ajax({
+      url: "/cms/teachers/add_teacher",
+      type : "POST",
+      contentType: "application/json",
+      headers: {"Authorization": `Bearer ${access_token}`},
+      data: JSON.stringify({
+        name:    $("#name").val(),
+        subject: $("#subject").val(),
+        email:   $("#email").val(),
+        contact: $("#contact").val()
+      }),
+      success: function(response){
+        console.log("Teacher adding Successful",response);
+        
+      },
+      error: function(xhr){
+        console.log("Teacher not Added",xhr.responseText);
+      }
+      
+    })
+   
+  })
+</script>
+	
+		</section>
+		<!-- END TEAM -->	
+{% endblock%}
