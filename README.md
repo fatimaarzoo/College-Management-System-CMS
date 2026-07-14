@@ -8,18 +8,49 @@ This project with demonstrates modern backend development practices including RE
 
 # 🛠 Tech Stack
 
-- Frontend: HTML, CSS3, JavaScript, Ajax
-- Backend: FastAPI, Python
-- API Documentation: Swagger UI
-- Database: PostgreSQL, SQLAlchemy ORM, Alembic
-- Authentication: JWT, OAuth2, Passlib
-- Background Tasks: Celery, Redis
-- Email: SMTP, MailHog
-- Validation: Pydantic
-- Containerization: Docker, Docker Compose
-- Package Manager: uv
-- Webserver: Uvicorn
+## Frontend
+- HTML
+- CSS3
+- JavaScript
+- Ajax
 
+## Backend
+- FastAPI
+- Python 
+
+## API Documentation
+- Swagger UI
+
+## Database
+- PostgreSQL
+- SQLAlchemy ORM
+- Alembic
+
+## Authentication
+- JWT
+- OAuth2
+- Passlib
+
+## Background Tasks
+- Celery
+- Redis
+
+## Email
+- SMTP
+- MailHog
+
+## Validation
+- Pydantic
+
+## Containerization
+- Docker
+- Docker Compose
+
+## Package Manager 
+- uv
+
+## Webserver
+-  uvicorn
 ---
 
 # 🚀 Features
