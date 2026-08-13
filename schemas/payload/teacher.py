@@ -6,5 +6,5 @@ class TeacherAdd(BaseModel):
     subject     : str
     email       : EmailStr
     contact     : int
-    joined_date : datetime
+    joined_date : Optional[datetime] = None
     model_config = {"from_attributes": True}
