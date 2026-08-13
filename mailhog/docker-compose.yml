@@ -1,0 +1,16 @@
+services:
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+
+    ports:
+      - "1025:1025" # SMTP
+      - "8025:8025" # Web UI
+
+    volumes:
+      - mailhog_data:/data
+
+    restart: unless-stopped
+
+volumes:
+  mailhog_data:
