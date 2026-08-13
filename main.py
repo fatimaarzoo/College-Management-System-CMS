@@ -29,7 +29,7 @@ templates = Jinja2Templates(directory="templates/home/")
 
 app.add_middleware(SessionMiddleware,secret_key=SECRET_KEY)
 
-app.add_middleware(AuthenticationMiddleware, backend=BasicAuthBackend())
+# app.add_middleware(AuthenticationMiddleware, backend=BasicAuthBackend())
 
 app.mount("/assets", StaticFiles(directory="assets"),name="assets")
 
