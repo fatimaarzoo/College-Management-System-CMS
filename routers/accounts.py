@@ -22,7 +22,7 @@ from starlette.middleware.sessions import SessionMiddleware
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from tasks import write_log_celery,app
+# from tasks import write_log_celery,app
 from celery.result import AsyncResult
 from services.accounts import *
 
