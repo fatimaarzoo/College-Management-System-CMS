@@ -10,6 +10,7 @@ dependencies = [
     "fastapi>=0.136.0",
     "flower>=2.0.1",
     "itsdangerous>=2.2.0",
+    "jinja2>=3.1.6",
     "mailtrap>=2.5.0",
     "passlib>=1.7.4",
     "pydantic[email]>=2.13.3",
