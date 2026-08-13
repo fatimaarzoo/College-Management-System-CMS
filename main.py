@@ -13,7 +13,7 @@ import os
 import smtplib
 from email.mime.text import MIMEText
 from fastapi.staticfiles import StaticFiles
-from core.middleware import BasicAuthBackend
+# from core.middleware import BasicAuthBackend
 # from celery_worker import write_log_celery
 
 load_dotenv()
