@@ -1,4 +1,4 @@
-from fastapi import FastAPI,Request
+from fastapi import FastAPI,Request,Depends
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from routers import accounts, courses, students, teachers
@@ -15,7 +15,9 @@ from email.mime.text import MIMEText
 from fastapi.staticfiles import StaticFiles
 # from core.middleware import BasicAuthBackend
 # from celery_worker import write_log_celery
-
+from database.models import *
+from database.database import get_db
+from sqlalchemy.orm import Session
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -36,8 +38,10 @@ app.mount("/assets", StaticFiles(directory="assets"),name="assets")
 
 
 @app.get("/",response_class=HTMLResponse)
-def home(request:Request):
-     return templates.TemplateResponse(request=request, name="index2.html")
+def home(request:Request, db: Session = Depends(get_db)):
+     tea = db.query(Teacher).all()
+     crs = db.query(Course).all()   
+     return templates.TemplateResponse(request=request, name="index2.html",context={'teacher':tea,'course':crs})
 
 @app.get("/about",response_class=HTMLResponse)
 def about(request:Request):
