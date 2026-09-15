@@ -41,7 +41,9 @@ def register_page(request: Request , db : Session = Depends(get_db)):
 def register(username : str = Form(...),mail : str = Form(...),password : str = Form(...),password2 : str = Form(...),role: str = Form(...), db : Session = Depends(get_db)):
     print(username+mail+password+role)
     message = register_user(username,mail,password,role,db)
-    return JSONResponse(content=message , status_code=200 )
+    print(message)#console message and js message that id created
+    return RedirectResponse(url="/cms/accounts/login" , status_code=303 )
+    
 
 
 @router.get("/login",response_class=HTMLResponse,include_in_schema=False)
