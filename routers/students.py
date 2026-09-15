@@ -129,7 +129,7 @@ def add_student_page(request: Request ,id:int, db: Session = Depends(get_db)):
     return templates.TemplateResponse(request=request, name="students/select_course.html",context={"std":std,"crs":crs})
    
 @router.get("/{id}", response_model=StudentResponse)
-def find_student(request:Request,id: int, db: Session = Depends(get_db)):
+def find_student(request:Request,id: int, db: Session = Depends(get_db),user= Depends(get_current_user)):
     """ Args*:
             Accepts specific Student id as a parameter 
             id(int) : id of the Student
@@ -138,11 +138,14 @@ def find_student(request:Request,id: int, db: Session = Depends(get_db)):
             Student object: Student details of the Student with that id.
     """
     try:
-        token = request.cookies.get("access_token")
-        user_id= get_current_user_second(token)    
-        user = db.query(User).filter(User.id == int(user_id)).first()
-        print(user.role)
-        # user = request.user
+        try:
+            token = request.cookies.get("access_token")
+            user_id= get_current_user_second(token)    
+            user = db.query(User).filter(User.id == int(user_id)).first()
+            print(user.role)
+            # user = request.user
+        except:
+            user= None
         std = db.query(Student).filter(Student.id == id).first()
         if not std:
             raise HTTPException(status_code=404, detail=f"Student of id={id} not found")

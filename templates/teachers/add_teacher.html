@@ -6,6 +6,8 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
+            <div class="card shadow">
+                <div id="message" class="bg-danger">
 
             <div class="card shadow">
                 <div class="card-header">
@@ -64,10 +66,12 @@
       }),
       success: function(response){
         console.log("Teacher adding Successful",response);
+        window.location.href = "/cms/teachers";
         
       },
       error: function(xhr){
         console.log("Teacher not Added",xhr.responseText);
+        $("#message").html("Teacher not Added",xhr.responseText);
       }
       
     })

@@ -1,5 +1,5 @@
 from fastapi import APIRouter,Depends,HTTPException,Request,Response,status,Form
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse,RedirectResponse
 from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
 from fastapi.responses import HTMLResponse,RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -40,8 +40,9 @@ def register_page(request: Request , db : Session = Depends(get_db)):
 @router.post("/register")
 def register(username : str = Form(...),mail : str = Form(...),password : str = Form(...),password2 : str = Form(...),role: str = Form(...), db : Session = Depends(get_db)):
     print(username+mail+password+role)
-    message = register_user(username,mail,password,role,db)#send role???
-    return JSONResponse(content=message , status_code=200 )
+    message = register_user(username,mail,password,role,db)
+    print(message)#console message and js message that id created
+    return RedirectResponse(url="/cms/accounts/login" , status_code=303 )
 
 @router.get("/login",response_class=HTMLResponse)
 def login_page(request: Request , db : Session = Depends(get_db)):
@@ -72,7 +73,7 @@ def logout(response:Response,request : Request, token:str = Depends(JWTBearer(au
     #     db.add(TokenTable(access_token=token, status=False))
     #     db.commit()
     print(message)
-    return {"message": message, }
+    return {"message": message }
 
 @router.get("/change_password",response_class=HTMLResponse)
 def change_password_page(request: Request , db : Session = Depends(get_db)):

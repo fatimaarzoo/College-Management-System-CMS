@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException,Request
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse,JSONResponse
+from fastapi.responses import HTMLResponse,JSONResponse,RedirectResponse
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from fastapi.exceptions import RequestValidationError
@@ -41,13 +41,17 @@ def add_course(request:Request,course: CourseAdd, db: Session = Depends(get_db),
     try:
         if course.name is None:
             return {"error": "Enter a name!"}
+        if db.query(Course).filter(Course.name == course.name).first():
+            return {"Course with that name already exists"}
         crs = Course(name=course.name)
         db.add(crs)
         db.commit()
         db.refresh(crs)
         course = crs
         # content=jsonable_encoder(course)
+        # return crs
         # return JSONResponse(status_code=200, content={'course':course})
+        # return RedirectResponse(url="/cms/courses" , status_code=303 )
         return templates.TemplateResponse(request=request, name="courses/add_course.html", status_code=200)
     except RequestValidationError as e:
         raise HTTPException(status_code=422, detail=str(e))
@@ -112,10 +116,13 @@ def course_page(request:Request,id:int,db : Session = Depends(get_db)):
     """
     Method returns selected course
     """
-    token = request.cookies.get("access_token")
-    user_id= get_current_user_second(token)    
-    user = db.query(User).filter(User.id == int(user_id)).first()
-    print(user.role)
+    try:
+        token = request.cookies.get("access_token")
+        user_id= get_current_user_second(token)    
+        user = db.query(User).filter(User.id == int(user_id)).first()
+        print(user.role)
+    except:
+        user = None
     # user =request.user
 
     try:

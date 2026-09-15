@@ -7,6 +7,9 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
+            <!-- <div class="bg-danger ">
+
+            </div> -->
 
             <div class="card shadow">
                 <div class="card-header">
@@ -64,6 +67,7 @@
       }),
       success: function(response){
         console.log("Course adding Successful",response);
+        window.location.href = "/cms/courses/";
         
       },
       error: function(xhr){

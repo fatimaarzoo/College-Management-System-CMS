@@ -14,6 +14,14 @@ from services.teacher import *
 router = APIRouter(prefix="/teachers", tags=["Teachers"])
 templates = Jinja2Templates(directory="templates")
 
+@router.get("/", response_class=HTMLResponse,include_in_schema=False)
+def get_teachers_page(request: Request,db: Session = Depends(get_db)):
+    try:
+        tea= get_teachers(db)
+        return templates.TemplateResponse(request=request, name="teachers/instructor.html",context={'tea':tea or None})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
 @router.get("/api", response_model=List[TeacherResponse])
 def get_all_teachers(db: Session = Depends(get_db)):
     try:
@@ -22,18 +30,10 @@ def get_all_teachers(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/", response_class=HTMLResponse,include_in_schema=False)
-def get_teachers_page(request: Request , db: Session = Depends(get_db)):
-    try:
-        tea= get_teachers(db)
-        return templates.TemplateResponse(request=request, name="teachers/instructor.html",context={'tea':tea})
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
     
 @router.get("/add_teacher",response_class=HTMLResponse,include_in_schema=False)
-def add_teacher_page(request: Request ,teacher: TeacherAdd, db: Session = Depends(get_db),user = Depends(get_current_user)):
-        tea = add_teacher(teacher,db,user)
-        return templates.TemplateResponse(request=request, name="teachers/add_teacher.html",context={'tea':tea})
+def add_teacher_page(request: Request):
+        return templates.TemplateResponse(request=request, name="teachers/add_teacher.html")
 
 @router.get("/choose_course/{id}",response_class=HTMLResponse,include_in_schema=False)
 def choose_course_page(id : int,request: Request , db: Session = Depends(get_db)):
@@ -48,18 +48,20 @@ def update_teacher_page(request: Request ,id: int, teacher: TeacherAdd, db: Sess
 
 @router.get("/{id}",response_model=TeacherResponse)
 def find_teacher(request: Request ,id: int, db: Session = Depends(get_db)):
-    
     try:
-        token = request.cookies.get("access_token")
-        user_id= get_current_user_second(token)    
-        user = db.query(User).filter(User.id == int(user_id)).first()
-        print(user.role)    
+        try:
+            token = request.cookies.get("access_token")
+            user_id= get_current_user_second(token)    
+            user = db.query(User).filter(User.id == int(user_id)).first()
+            print(user.role)
+        except:
+            user = None    
         # user =request.user
         # print(user.id)
         tea = db.query(Teacher).filter(Teacher.id == id).first()
         if not tea:
             raise HTTPException(status_code=404, detail="Teacher not found")
-        return templates.TemplateResponse(request=request, name="teachers/ins_details.html", context={"tea":tea,"user":user})
+        return templates.TemplateResponse(request=request, name="teachers/ins_details.html", context={"tea":tea,"user":user or None})
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -67,6 +69,7 @@ def find_teacher(request: Request ,id: int, db: Session = Depends(get_db)):
 def add_teacher(teacher: TeacherAdd, db: Session = Depends(get_db),user = Depends(get_current_user)):
     try:
         tea= add_teacher_service(teacher,db,user)
+        return tea
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
