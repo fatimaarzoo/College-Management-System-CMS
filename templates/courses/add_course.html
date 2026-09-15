@@ -64,6 +64,7 @@
       }),
       success: function(response){
         console.log("Course adding Successful",response);
+        window.location.href = "/cms/courses/";
         
       },
       error: function(xhr){
@@ -74,68 +75,9 @@
    
   })
 </script>
-<!-- document
-    .getElementById("courseForm")
-    .addEventListener("submit", async function(e) {
-
-        e.preventDefault();
-
-        const courseName =
-            document.getElementById("courseName").value;
-
-        try {
-
-            const response = await fetch(
-                "http://127.0.0.1:8000/cms/courses/",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({
-                        name: courseName
-                    })
-                }
-            );
-
-            const data = await response.json();
-
-            const messageDiv =
-                document.getElementById("message");
-
-            if (response.ok) {
-
-                messageDiv.innerHTML =
-                    `<div class="alert alert-success">
-                        Course added successfully!
-                    </div>`;
-
-                document
-                    .getElementById("courseForm")
-                    .reset();
-
-            } else {
-
-                messageDiv.innerHTML =
-                    `<div class="alert alert-danger">
-                        ${data.detail || data.error}
-                    </div>`;
-            }
-
-        } catch (error) {
-
-            document.getElementById("message").innerHTML =
-                `<div class="alert alert-danger">
-                    Failed to connect to server.
-                </div>`;
-        }
-});
-</script> -->
-
 	
 		</section>
-		<!-- END COURSE -->		
+		
 		
 {% endblock %}
 
